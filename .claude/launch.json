@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["node_modules/@angular/cli/bin/ng.js", "serve", "--host", "127.0.0.1"],
+      "port": 3003
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["node_modules/@angular/cli/bin/ng.js", "serve", "--configuration=production"],
+      "port": 3003
+    },
+    {
+      "name": "test",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["node_modules/vitest/vitest.mjs"],
+      "port": 51204
+    }
+  ]
+}
