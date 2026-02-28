@@ -32,6 +32,10 @@ export class AppComponent {
   authError = signal('');
   authShake = signal(false);
 
+  // 利用規約（localStorageで永続化 = 一度同意したらずっと有効）
+  termsAccepted = signal(localStorage.getItem('yayoi_terms') === 'ok');
+  showTerms = signal(false);
+
   private simpleHash(str: string): string {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -48,11 +52,21 @@ export class AppComponent {
       sessionStorage.setItem('yayoi_auth', 'ok');
       this.isAuthenticated.set(true);
       this.authError.set('');
+      // 利用規約に未同意なら規約画面を表示
+      if (!this.termsAccepted()) {
+        this.showTerms.set(true);
+      }
     } else {
       this.authShake.set(true);
       this.authError.set('アクセスコードが正しくありません');
       setTimeout(() => this.authShake.set(false), 500);
     }
+  }
+
+  acceptTerms() {
+    localStorage.setItem('yayoi_terms', 'ok');
+    this.termsAccepted.set(true);
+    this.showTerms.set(false);
   }
 
   onAuthKeydown(event: KeyboardEvent) {
