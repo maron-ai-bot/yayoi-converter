@@ -1,3 +1,34 @@
+<!-- パスワード認証画面 -->
+@if (!isAuthenticated()) {
+<div class="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-icon">🔐</div>
+    <div class="auth-title">弥生CSV変換ツール</div>
+    <div class="auth-subtitle">アクセスコードを入力してください</div>
+    <div class="auth-input-wrap">
+      <input
+        type="password"
+        class="auth-input"
+        [class.error]="authShake()"
+        placeholder="アクセスコード"
+        autocomplete="off"
+        [ngModel]="authCode()"
+        (ngModelChange)="authCode.set($event)"
+        (keydown)="onAuthKeydown($event)"
+      >
+    </div>
+    <div class="auth-error-msg">{{ authError() }}</div>
+    <button class="auth-btn" (click)="checkAuth()">ログイン</button>
+    <div class="auth-line-guide">
+      <p>アクセスコードはLINE公式アカウントの<br>友だち登録特典で配布しています🎁</p>
+      <a href="https://lin.ee/g3MmeoCw" target="_blank" rel="noopener" class="auth-line-link">
+        📱 LINEで友だち追加する
+      </a>
+    </div>
+  </div>
+</div>
+}
+
 <div class="max-w-[95vw] mx-auto transition-all duration-300">
   <!-- Mode Switcher (top) -->
   <div class="mb-4">

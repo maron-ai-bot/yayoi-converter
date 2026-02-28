@@ -26,6 +26,39 @@ export class AppComponent {
   activeTab = signal<'guide' | 'main' | 'result' | 'matching' | 'master'>('guide');
   showRuleManager = signal(false);
 
+  // パスワード認証
+  isAuthenticated = signal(sessionStorage.getItem('yayoi_auth') === 'ok');
+  authCode = signal('');
+  authError = signal('');
+  authShake = signal(false);
+
+  private simpleHash(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + ch;
+      hash |= 0;
+    }
+    return hash.toString(36);
+  }
+
+  checkAuth() {
+    const code = this.authCode().trim();
+    if (this.simpleHash(code) === this.simpleHash('aiyayoi2026')) {
+      sessionStorage.setItem('yayoi_auth', 'ok');
+      this.isAuthenticated.set(true);
+      this.authError.set('');
+    } else {
+      this.authShake.set(true);
+      this.authError.set('アクセスコードが正しくありません');
+      setTimeout(() => this.authShake.set(false), 500);
+    }
+  }
+
+  onAuthKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') this.checkAuth();
+  }
+
   get appLogic() { return this.modeService.activeService(); }
   get cfg() { return this.modeService.modeConfig(); }
 
